@@ -20,13 +20,13 @@ const BottleGame: React.FC = () => {
     // Reset spinning state after animation ends (5s matched with CSS)
     setTimeout(() => {
       setIsSpinning(false);
-    }, 5000);
+    }, 5100);
   };
 
   return (
     <>
       <SEO
-        title="หมุนขวด (Spin the Bottle)"
+        title="หมุนขวด (Spin the Bottle) | เกมวงเหล้า"
         description="เกมหมุนขวดออนไลน์ เลือกคนในวงเหล้า เล่นง่ายไม่ต้องโหลดแอป"
         url={window.location.href}
       />
@@ -67,7 +67,6 @@ const BottleGame: React.FC = () => {
               style={{
                 transform: `rotate(${rotation}deg)`,
                 transition: isSpinning ? 'transform 5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none',
-                // cubic-bezier(0.25, 1, 0.5, 1) gives a nice soft landing
               }}
             />
 
@@ -82,11 +81,17 @@ const BottleGame: React.FC = () => {
             className={`
               px-12 py-4 rounded-full font-black text-xl shadow-xl transition-all relative z-20 group
               ${isSpinning
-                ? 'bg-slate-700 text-slate-500 cursor-not-allowed scale-95'
+                ? 'bg-slate-700 text-slate-400 cursor-not-allowed scale-95 opacity-80'
                 : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105 active:scale-95 text-white shadow-green-500/20'}
             `}
           >
-            {isSpinning ? 'กำลังหมุน...' : 'หมุนเลย! 🎲'}
+            {isSpinning ? (
+              <span className="flex items-center gap-2">
+                กำลังหมุน... <span className="animate-spin">⏳</span>
+              </span>
+            ) : (
+              'หมุนเลย! 🎲'
+            )}
 
             {!isSpinning && (
               <span className="absolute inset-0 rounded-full ring-2 ring-white/30 animate-ping opacity-30"></span>
