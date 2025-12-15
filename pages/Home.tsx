@@ -67,8 +67,33 @@ const Home: React.FC = () => {
           </button>
         </section>
 
+        {/* Secondary Actions */}
+        <div className="grid grid-cols-2 gap-3 w-full mb-8">
+          <button
+            onClick={() => navigate('/blog')}
+            className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/60 border border-slate-700 hover:bg-slate-700/60 transition-colors"
+          >
+            <div className="p-2 mb-2 bg-purple-500/20 text-purple-400 rounded-xl">
+              <span className="text-xl">📚</span>
+            </div>
+            <span className="text-sm font-bold text-slate-200">บทความ</span>
+            <span className="text-[10px] text-slate-500">เทคนิค & กติกา</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/about')}
+            className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/60 border border-slate-700 hover:bg-slate-700/60 transition-colors"
+          >
+            <div className="p-2 mb-2 bg-blue-500/20 text-blue-400 rounded-xl">
+              <span className="text-xl">ℹ️</span>
+            </div>
+            <span className="text-sm font-bold text-slate-200">เกี่ยวกับเรา</span>
+            <span className="text-[10px] text-slate-500">ผู้พัฒนา & ติดต่อ</span>
+          </button>
+        </div>
+
         {/* Feature Grid (Coming Soon) */}
-        <section className="w-full">
+        <section className="w-full mb-12">
           <h4 className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4 pl-2 flex items-center gap-2">
             <Sparkles size={12} className="text-yellow-500" />
             Coming Soon
@@ -85,6 +110,31 @@ const Home: React.FC = () => {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* SEO - Keyword Rich Content Section (Bottom) */}
+        <section className="w-full pt-8 border-t border-slate-800/50 pb-12">
+          <article className="prose prose-invert prose-sm max-w-none text-slate-400">
+            <h2 className="text-xl font-bold text-slate-300 mb-4">เกมวงเหล้าออนไลน์ (Drinking Game Online) คืออะไร?</h2>
+            <p className="mb-4 text-sm leading-relaxed">
+              <strong>เกมวงเหล้า (Game Wong Lhao)</strong> คือเว็บแอปพลิเคชันที่รวบรวมมินิเกมสำหรับงานปาร์ตี้ สังสรรค์ หรือวงดื่มกับเพื่อนฝูง โดยที่คุณ<u>ไม่ต้องติดตั้งแอปพลิเคชัน</u>ลงในเครื่อง สามารถเปิดผ่านเว็บเบราว์เซอร์ได้ทันที รองรับทั้งมือถือและแท็บเล็ต
+            </p>
+
+            <h3 className="text-lg font-bold text-slate-300 mb-2">รวมเกมยอดนิยมในวงเหล้า</h3>
+            <ul className="list-disc pl-5 space-y-2 mb-4 text-sm">
+              <li>
+                <strong>วงล้อเสี่ยงทาย (Wheel of Fate)</strong>: หรือเกมหมุนวงล้อ ที่ให้คุณใส่ชื่อเพื่อน หรือคำสั่งตลกๆ ลงไป แล้วหมุนเพื่อสุ่มหาผู้โชคดี เหมาะสำหรับการสุ่มคนดื่ม หรือสั่งให้เพื่อนทำตามคำสั่ง
+              </li>
+              <li>
+                <strong>เกมหมุนขวด (Spin the Bottle)</strong>: เกมขวดหมุนสุดคลาสสิค แต่มาในรูปแบบออนไลน์ ไม่ต้องหาขวดจริงให้ยุ่งยาก ระบบหมุนสมจริงตามหลักฟิสิกส์
+              </li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-slate-300 mb-2">ทำไมต้องเล่นเกมวงเหล้ากับเรา?</h3>
+            <p className="text-sm leading-relaxed">
+              เราออกแบบมาเพื่อแก้ปัญหา "วงกร่อย" หรือ "คิดไม่ออกว่าจะเล่นอะไรดี" โดยรวบรวมเกมที่สร้างความสนุกและเสียงหัวเราะได้ง่ายๆ กติกาไม่ซับซ้อน และที่สำคัญคือ <strong>ฟรีตลอดชีพ</strong>
+            </p>
+          </article>
         </section>
       </main>
     </>

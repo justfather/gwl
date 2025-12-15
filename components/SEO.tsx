@@ -1,41 +1,56 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { APP_NAME } from '../constants';
 
 interface SEOProps {
-    title: string;
+    title?: string;
     description?: string;
     image?: string;
     url?: string;
+    type?: 'website' | 'article';
+    schema?: object; // Support for JSON-LD Structured Data
 }
 
 const SEO: React.FC<SEOProps> = ({
     title,
-    description = "รวมเกมสนุกๆ ในวงเหล้า วงล้อเสี่ยงทาย หมุนขวด เกมดื่มออนไลน์ เล่นฟรีไม่ต้องโหลดแอป",
-    image = "/bottle.png", // Default image (will add later)
-    url = window.location.href
+    description,
+    image,
+    url,
+    type = 'website',
+    schema
 }) => {
-    const siteTitle = "เกมวงเหล้า (Drinking Game)";
-    const fullTitle = `${title} | ${siteTitle}`;
+    const siteTitle = title ? `${title} | ${APP_NAME}` : APP_NAME;
+    const metaDescription = description || 'เกมวงเหล้าออนไลน์ (Drinking Game) รวมเกมสนุกๆ ในวงเหล้า วงล้อเสี่ยงทาย หมุนขวด เกมไพ่ เล่นฟรีไม่ต้องโหลดแอป';
+    const siteUrl = url || window.location.href;
+    const metaImage = image || '/og-image.jpg'; // You should add a default OG image later
 
     return (
         <Helmet>
-            {/* Standard Metadata */}
-            <title>{fullTitle}</title>
-            <meta name="description" content={description} />
+            {/* Primary Meta Tags */}
+            <title>{siteTitle}</title>
+            <meta name="description" content={metaDescription} />
+            <link rel="canonical" href={siteUrl} />
 
             {/* Open Graph / Facebook */}
-            <meta property="og:type" content="website" />
-            <meta property="og:url" content={url} />
-            <meta property="og:title" content={fullTitle} />
-            <meta property="og:description" content={description} />
-            <meta property="og:image" content={image} />
+            <meta property="og:type" content={type} />
+            <meta property="og:url" content={siteUrl} />
+            <meta property="og:title" content={siteTitle} />
+            <meta property="og:description" content={metaDescription} />
+            <meta property="og:image" content={metaImage} />
 
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:url" content={url} />
-            <meta property="twitter:title" content={fullTitle} />
-            <meta property="twitter:description" content={description} />
-            <meta property="twitter:image" content={image} />
+            <meta property="twitter:url" content={siteUrl} />
+            <meta property="twitter:title" content={siteTitle} />
+            <meta property="twitter:description" content={metaDescription} />
+            <meta property="twitter:image" content={metaImage} />
+
+            {/* JSON-LD Structured Data for Rich Snippets */}
+            {schema && (
+                <script type="application/ld+json">
+                    {JSON.stringify(schema)}
+                </script>
+            )}
         </Helmet>
     );
 };
