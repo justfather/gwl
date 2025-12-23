@@ -137,35 +137,35 @@ const BottleGame: React.FC = () => {
         </header>
 
         {/* Semantic Main Content */}
-        <main className="flex-1 flex flex-col items-center justify-center p-4 pt-8 relative w-full max-w-md mx-auto">
+        <main className="flex-1 flex flex-col items-center justify-start p-2 pt-4 relative w-full max-w-md mx-auto">
 
-          {/* Bottle Selector */}
-          <div className="absolute top-8 left-0 right-0 flex justify-center gap-4 z-20">
+          {/* Bottle Selector - Smaller */}
+          <div className="flex justify-center gap-3 z-20 mb-2">
             {BOTTLES.map((b) => (
               <button
                 key={b.id}
                 onClick={() => setSelectedBottle(b)}
-                className={`w-12 h-12 rounded-full border-2 overflow-hidden transition-all transform ${selectedBottle.id === b.id ? 'border-white scale-110 shadow-lg shadow-white/20' : 'border-slate-600 opacity-50 grayscale hover:opacity-100 hover:grayscale-0'}`}
+                className={`w-9 h-9 rounded-full border-2 overflow-hidden transition-all transform ${selectedBottle.id === b.id ? 'border-white scale-110 shadow-lg shadow-white/20' : 'border-slate-600 opacity-50 grayscale hover:opacity-100 hover:grayscale-0'}`}
               >
                 <img src={b.src} alt={b.name} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
 
-          {/* Instructions */}
-          <div className="text-center mb-8 mt-16 z-10 pointer-events-none transition-all duration-300">
-            <h2 className="text-3xl font-black mb-2 text-white drop-shadow-lg tracking-tight">
+          {/* Instructions - Smaller */}
+          <div className="text-center mb-2 z-10 pointer-events-none">
+            <h2 className="text-xl font-bold text-white drop-shadow-lg tracking-tight">
               {selectedBottle.name}
             </h2>
-            <p className="text-slate-400 text-sm">
+            <p className="text-slate-400 text-xs">
               ปัดที่ขวดแรงๆ เพื่อหมุน! 🍾
             </p>
           </div>
 
-          {/* Bottle Container */}
+          {/* Bottle Container - Much Larger */}
           <div
-            className="relative aspect-square flex items-center justify-center transition-all duration-300"
-            style={{ width: 'min(75vw, 50vh)', height: 'min(75vw, 50vh)' }}
+            className="flex-1 relative aspect-square flex items-center justify-center w-full"
+            style={{ maxWidth: '95vw', maxHeight: '65vh' }}
           >
 
             {/* Floor Shadow/Glow Detail */}
