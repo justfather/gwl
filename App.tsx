@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Dices, ScrollText, Gamepad2, Info } from 'lucide-react';
 import Layout from './components/Layout';
 import About from './pages/About';
