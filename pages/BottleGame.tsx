@@ -137,10 +137,10 @@ const BottleGame: React.FC = () => {
         </header>
 
         {/* Semantic Main Content */}
-        <main className="flex-1 flex flex-col items-center justify-center p-4 relative w-full max-w-md mx-auto">
+        <main className="flex-1 flex flex-col items-center justify-center p-4 pt-8 relative w-full max-w-md mx-auto">
 
           {/* Bottle Selector */}
-          <div className="absolute top-4 left-0 right-0 flex justify-center gap-4 z-20">
+          <div className="absolute top-8 left-0 right-0 flex justify-center gap-4 z-20">
             {BOTTLES.map((b) => (
               <button
                 key={b.id}
@@ -153,7 +153,7 @@ const BottleGame: React.FC = () => {
           </div>
 
           {/* Instructions */}
-          <div className="text-center mb-6 z-10 pointer-events-none transition-all duration-300">
+          <div className="text-center mb-8 mt-16 z-10 pointer-events-none transition-all duration-300">
             <h2 className="text-3xl font-black mb-2 text-white drop-shadow-lg tracking-tight">
               {selectedBottle.name}
             </h2>
@@ -165,7 +165,7 @@ const BottleGame: React.FC = () => {
           {/* Bottle Container */}
           <div
             className="relative aspect-square flex items-center justify-center transition-all duration-300"
-            style={{ width: 'min(90vw, 60vh)', height: 'min(90vw, 60vh)' }}
+            style={{ width: 'min(75vw, 50vh)', height: 'min(75vw, 50vh)' }}
           >
 
             {/* Floor Shadow/Glow Detail */}
