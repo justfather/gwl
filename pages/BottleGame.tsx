@@ -122,7 +122,7 @@ const BottleGame: React.FC = () => {
         url={window.location.href}
       />
 
-      <div className="min-h-screen bg-[#0F172A] text-white flex flex-col font-sans overflow-hidden touch-none select-none">
+      <div className="h-full bg-[#0F172A] text-white flex flex-col font-sans overflow-hidden touch-none select-none">
         {/* Semantic Header */}
         <header className="p-4 flex items-center justify-between z-10">
           <a href="/" className="text-slate-400 hover:text-white transition flex items-center gap-2">
@@ -153,7 +153,7 @@ const BottleGame: React.FC = () => {
           </div>
 
           {/* Instructions */}
-          <div className="text-center mb-8 z-10 pointer-events-none mt-16">
+          <div className="text-center mb-6 z-10 pointer-events-none transition-all duration-300">
             <h2 className="text-3xl font-black mb-2 text-white drop-shadow-lg tracking-tight">
               {selectedBottle.name}
             </h2>
@@ -163,7 +163,10 @@ const BottleGame: React.FC = () => {
           </div>
 
           {/* Bottle Container */}
-          <div className="relative w-full aspect-square flex items-center justify-center">
+          <div
+            className="relative aspect-square flex items-center justify-center transition-all duration-300"
+            style={{ width: 'min(90vw, 60vh)', height: 'min(90vw, 60vh)' }}
+          >
 
             {/* Floor Shadow/Glow Detail */}
             <div className={`absolute inset-0 rounded-full filter blur-3xl -z-10 scale-0.7 animate-pulse opacity-20`} style={{ backgroundColor: selectedBottle.color }}></div>
@@ -173,7 +176,7 @@ const BottleGame: React.FC = () => {
               ref={bottleRef}
               src={selectedBottle.src} // Use selected bottle
               alt="Beer Bottle"
-              className="h-[85%] w-auto drop-shadow-2xl filter brightness-110 cursor-grab active:cursor-grabbing origin-center touch-none"
+              className="h-[95%] w-auto drop-shadow-2xl filter brightness-110 cursor-grab active:cursor-grabbing origin-center touch-none"
               style={{
                 willChange: 'transform',
                 transform: `rotate(${rotation.current}deg)`,
