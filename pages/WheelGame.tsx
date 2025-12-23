@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { RefreshCw, X, Hand, Settings } from 'lucide-react';
+import { RefreshCw, X, Hand, Settings, Save, Check } from 'lucide-react';
 import { GameMode, FUN_QUESTS, HOT_QUESTS, HARD_QUESTS, randomizeOptions } from '../data/gameData';
 import { GameState, WheelOption } from '../types';
 import SEO from '../components/SEO';
+
+const STORAGE_KEYS = {
+  PRESET_1: 'wheelgame_custom_preset_1',
+  PRESET_2: 'wheelgame_custom_preset_2',
+  PRESET_3: 'wheelgame_custom_preset_3',
+};
 
 const WheelGame: React.FC = () => {
   // ... (state declarations remain same)
@@ -19,6 +25,8 @@ const WheelGame: React.FC = () => {
 
   // Custom Mode State
   const [customInputs, setCustomInputs] = useState<string[]>(Array(8).fill(''));
+  const [selectedPreset, setSelectedPreset] = useState<1 | 2 | 3>(1);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Refs for physics loop
   const wheelRef = useRef<HTMLDivElement>(null);
@@ -44,9 +52,54 @@ const WheelGame: React.FC = () => {
   const PIN_COUNT = options.length > 0 ? options.length : 8;
   const SLICE_ANGLE = 360 / PIN_COUNT;
 
+  // ==========================================
+  // Preset Management Functions
+  // ==========================================
+  const getStorageKey = (preset: 1 | 2 | 3): string => {
+    return preset === 1 ? STORAGE_KEYS.PRESET_1 :
+           preset === 2 ? STORAGE_KEYS.PRESET_2 :
+           STORAGE_KEYS.PRESET_3;
+  };
+
+  const loadPreset = (preset: 1 | 2 | 3) => {
+    try {
+      const key = getStorageKey(preset);
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const data = JSON.parse(saved);
+        setCustomInputs(data);
+      } else {
+        setCustomInputs(Array(8).fill(''));
+      }
+    } catch (error) {
+      console.error('Error loading preset:', error);
+      setCustomInputs(Array(8).fill(''));
+    }
+  };
+
+  const savePreset = () => {
+    try {
+      const key = getStorageKey(selectedPreset);
+      localStorage.setItem(key, JSON.stringify(customInputs));
+
+      // Show success feedback
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+    } catch (error) {
+      console.error('Error saving preset:', error);
+      alert('ไม่สามารถบันทึกได้ กรุณาลองใหม่');
+    }
+  };
+
+  const handlePresetSelect = (preset: 1 | 2 | 3) => {
+    setSelectedPreset(preset);
+    loadPreset(preset);
+  };
+
   // Init Options on Load
   useEffect(() => {
     handleModeSelect('FUN');
+    loadPreset(1); // Load preset 1 by default
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -403,7 +456,24 @@ const WheelGame: React.FC = () => {
                 <div className="text-xs text-slate-400">ใส่ได้สูงสุด 8 ข้อ</div>
               </div>
 
-              <div className="space-y-2 mb-4">
+              {/* Preset Selector */}
+              <div className="flex gap-2 mb-4">
+                {([1, 2, 3] as const).map((preset) => (
+                  <button
+                    key={preset}
+                    onClick={() => handlePresetSelect(preset)}
+                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm transition-all ${
+                      selectedPreset === preset
+                        ? 'bg-blue-600 text-white shadow-lg scale-105'
+                        : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                    }`}
+                  >
+                    Preset {preset}
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-2 mb-3">
                 {customInputs.map((input, idx) => (
                   <div key={idx} className="flex gap-2">
                     <span className="text-slate-500 w-6 text-center text-sm pt-2">{idx + 1}.</span>
@@ -417,6 +487,29 @@ const WheelGame: React.FC = () => {
                 ))}
               </div>
 
+              {/* Save Button */}
+              <button
+                onClick={savePreset}
+                className={`w-full py-2.5 rounded-xl font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2 ${
+                  saveSuccess
+                    ? 'bg-green-600 text-white'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                }`}
+              >
+                {saveSuccess ? (
+                  <>
+                    <Check size={18} />
+                    บันทึกสำเร็จ!
+                  </>
+                ) : (
+                  <>
+                    <Save size={18} />
+                    บันทึก Preset {selectedPreset}
+                  </>
+                )}
+              </button>
+
+              {/* Start Game Button */}
               <button
                 onClick={saveCustomMode}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-lg transition-all active:scale-95"
