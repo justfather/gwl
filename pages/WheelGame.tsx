@@ -433,63 +433,58 @@ const WheelGame: React.FC = () => {
       </div>
 
       {/* Mode Selector & Shuffle Button */}
-      <div className="flex flex-col items-center gap-3">
-        {/* Mode Tabs */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleModeSelect('FUN')}
-            disabled={gameState === GameState.SPINNING}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
-              currentMode === 'FUN'
-                ? 'bg-yellow-500 text-black shadow-lg scale-105'
-                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-            }`}
-          >
-            🤡 สายฮา
-          </button>
-          <button
-            onClick={() => handleModeSelect('HOT')}
-            disabled={gameState === GameState.SPINNING}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
-              currentMode === 'HOT'
-                ? 'bg-pink-500 text-white shadow-lg scale-105'
-                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-            }`}
-          >
-            🔥 18+
-          </button>
-          <button
-            onClick={() => handleModeSelect('HARD')}
-            disabled={gameState === GameState.SPINNING}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
-              currentMode === 'HARD'
-                ? 'bg-red-600 text-white shadow-lg scale-105'
-                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-            }`}
-          >
-            💀 สายแข็ง
-          </button>
-          <button
-            onClick={() => setShowModeSelect(true)}
-            disabled={gameState === GameState.SPINNING}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
-              currentMode === 'CUSTOM'
-                ? 'bg-blue-500 text-white shadow-lg scale-105'
-                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-            }`}
-          >
-            ✏️ กำหนดเอง
-          </button>
-        </div>
-
-        {/* Shuffle Button */}
+      <div className="flex flex-wrap items-center justify-center gap-2 pb-4">
+        <button
+          onClick={() => handleModeSelect('FUN')}
+          disabled={gameState === GameState.SPINNING}
+          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
+            currentMode === 'FUN'
+              ? 'bg-yellow-500 text-black shadow-lg'
+              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+          }`}
+        >
+          🤡 สายฮา
+        </button>
+        <button
+          onClick={() => handleModeSelect('HOT')}
+          disabled={gameState === GameState.SPINNING}
+          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
+            currentMode === 'HOT'
+              ? 'bg-pink-500 text-white shadow-lg'
+              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+          }`}
+        >
+          🔥 18+
+        </button>
+        <button
+          onClick={() => handleModeSelect('HARD')}
+          disabled={gameState === GameState.SPINNING}
+          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
+            currentMode === 'HARD'
+              ? 'bg-red-600 text-white shadow-lg'
+              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+          }`}
+        >
+          💀 สายแข็ง
+        </button>
+        <button
+          onClick={() => setShowModeSelect(true)}
+          disabled={gameState === GameState.SPINNING}
+          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
+            currentMode === 'CUSTOM'
+              ? 'bg-blue-500 text-white shadow-lg'
+              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+          }`}
+        >
+          ✏️ กำหนดเอง
+        </button>
         <button
           onClick={shuffleQuestions}
           disabled={gameState === GameState.SPINNING}
-          className="flex items-center gap-2 px-5 py-2.5 bg-slate-800/80 backdrop-blur rounded-full border border-slate-600 text-white shadow-lg hover:bg-slate-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 rounded-full border border-slate-500 text-white text-xs font-medium hover:bg-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <RefreshCw size={18} />
-          <span className="font-medium">สุ่มคำถามใหม่</span>
+          <RefreshCw size={14} />
+          สุ่มใหม่
         </button>
       </div>
 
