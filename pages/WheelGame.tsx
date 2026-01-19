@@ -274,6 +274,28 @@ const WheelGame: React.FC = () => {
     if (needleRef.current) needleRef.current.style.transform = 'translateX(-50%) rotate(0deg) translateZ(0)';
   };
 
+  const shuffleQuestions = () => {
+    if (currentMode === 'CUSTOM') {
+      // สำหรับ custom mode ให้สุ่มจาก inputs ที่มีอยู่
+      const validInputs = customInputs.filter(t => t.trim().length > 0);
+      if (validInputs.length >= 2) {
+        const newOptions = randomizeOptions(validInputs);
+        setOptions(newOptions);
+      }
+    } else {
+      // สำหรับ preset modes ให้สุ่มจาก data ใหม่
+      let sourceData: string[] = [];
+      switch (currentMode) {
+        case 'FUN': sourceData = FUN_QUESTS; break;
+        case 'HOT': sourceData = HOT_QUESTS; break;
+        case 'HARD': sourceData = HARD_QUESTS; break;
+      }
+      const newOptions = randomizeOptions(sourceData);
+      setOptions(newOptions);
+    }
+    resetGame();
+  };
+
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current!);
@@ -313,7 +335,7 @@ const WheelGame: React.FC = () => {
       </div>
 
       {/* Wheel Container */}
-      <div className="relative w-full max-w-[600px] aspect-square mb-8 transition-all duration-300 mt-8">
+      <div className="relative w-full max-w-[500px] aspect-square mb-6 transition-all duration-300 mt-4 pointer-events-none">
 
         {/* Outer Ring */}
         <div className="absolute inset-[-4%] rounded-full bg-slate-800 shadow-2xl border border-slate-700"></div>
@@ -321,7 +343,7 @@ const WheelGame: React.FC = () => {
         {/* The Wheel */}
         <div
           ref={wheelRef}
-          className="w-full h-full rounded-full relative cursor-grab active:cursor-grabbing touch-none"
+          className="w-full h-full rounded-full relative cursor-grab active:cursor-grabbing touch-none pointer-events-auto"
           style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'rotate(0deg) translateZ(0)' }}
           onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
           onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
@@ -408,6 +430,67 @@ const WheelGame: React.FC = () => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Mode Selector & Shuffle Button */}
+      <div className="flex flex-col items-center gap-3">
+        {/* Mode Tabs */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleModeSelect('FUN')}
+            disabled={gameState === GameState.SPINNING}
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
+              currentMode === 'FUN'
+                ? 'bg-yellow-500 text-black shadow-lg scale-105'
+                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+            }`}
+          >
+            🤡 สายฮา
+          </button>
+          <button
+            onClick={() => handleModeSelect('HOT')}
+            disabled={gameState === GameState.SPINNING}
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
+              currentMode === 'HOT'
+                ? 'bg-pink-500 text-white shadow-lg scale-105'
+                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+            }`}
+          >
+            🔥 18+
+          </button>
+          <button
+            onClick={() => handleModeSelect('HARD')}
+            disabled={gameState === GameState.SPINNING}
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
+              currentMode === 'HARD'
+                ? 'bg-red-600 text-white shadow-lg scale-105'
+                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+            }`}
+          >
+            💀 สายแข็ง
+          </button>
+          <button
+            onClick={() => setShowModeSelect(true)}
+            disabled={gameState === GameState.SPINNING}
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-all disabled:opacity-50 ${
+              currentMode === 'CUSTOM'
+                ? 'bg-blue-500 text-white shadow-lg scale-105'
+                : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
+            }`}
+          >
+            ✏️ กำหนดเอง
+          </button>
+        </div>
+
+        {/* Shuffle Button */}
+        <button
+          onClick={shuffleQuestions}
+          disabled={gameState === GameState.SPINNING}
+          className="flex items-center gap-2 px-5 py-2.5 bg-slate-800/80 backdrop-blur rounded-full border border-slate-600 text-white shadow-lg hover:bg-slate-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <RefreshCw size={18} />
+          <span className="font-medium">สุ่มคำถามใหม่</span>
+        </button>
       </div>
 
       {/* Mode Selection Modal */}
