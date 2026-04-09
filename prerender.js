@@ -10,6 +10,14 @@ const port = 3001;
 const server = app.listen(port, async () => {
     console.log(`Prerender server running on port ${port}`);
 
+    // If running inside Vercel's build container, we bypass Puppeteer to prevent crash
+    if (process.env.VERCEL || process.env.CI) {
+        console.log('Detected Vercel/CI environment. Bypassing Puppeteer prerender to prevent build failure.');
+        console.log('Operating in SPA (Single Page Application) mode.');
+        server.close();
+        return process.exit(0);
+    }
+
     try {
         const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
         const page = await browser.newPage();
