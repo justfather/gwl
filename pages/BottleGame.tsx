@@ -3,9 +3,9 @@ import SEO from '../components/SEO';
 import { ArrowLeft, Hand, RefreshCw } from 'lucide-react';
 
 const BOTTLES = [
-  { id: 'singha', name: 'Singha', src: '/bottle-singha.png', color: '#fbbf24' },
-  { id: 'chang', name: 'Chang', src: '/bottle-chang.png', color: '#22c55e' },
-  { id: 'asahi', name: 'Asahi', src: '/bottle-asahi.png', color: '#94a3b8' },
+  { id: 'singha', name: 'Singha', src: '/bottle-singha.webp', color: '#fbbf24' },
+  { id: 'chang', name: 'Chang', src: '/bottle-chang.webp', color: '#22c55e' },
+  { id: 'asahi', name: 'Asahi', src: '/bottle-asahi.webp', color: '#94a3b8' },
 ];
 
 const BottleGame: React.FC = () => {

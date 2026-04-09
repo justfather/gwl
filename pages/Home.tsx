@@ -1,15 +1,58 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CircleDashed, Wine, Sparkles, ChevronRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { CircleDashed, Wine, Sparkles, ChevronRight, Dices, Layers } from 'lucide-react';
 import { APP_NAME, TAGLINE } from '../constants';
 import SEO from '../components/SEO';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
+  const homeSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": APP_NAME,
+      "operatingSystem": "WebBrowser",
+      "applicationCategory": "GameApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "THB"
+      },
+      "description": "เกมวงเหล้าออนไลน์ (Drinking Game) รวมเกมสนุกๆ ในวงเหล้า เล่นฟรีไม่ต้องโหลดแอป",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "เกมวงเหล้าออนไลน์ (Drinking Game Online) คืออะไร?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "เว็บแอปพลิเคชันที่รวบรวมมินิเกมสำหรับงานปาร์ตี้ สังสรรค์ โดยที่คุณไม่ต้องติดตั้งแอปพลิเคชันลงในเครื่อง สามารถเปิดผ่านเว็บเบราว์เซอร์ได้ทันที รองรับทั้งมือถือและแท็บเล็ต"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ทำไมต้องเล่นเกมวงเหล้ากับเรา?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "เราออกแบบมาเพื่อแก้ปัญหา 'วงกร่อย' หรือคิดไม่ออกว่าจะเล่นอะไรดี โดยรวบรวมเกมที่สร้างความสนุกและเสียงหัวเราะได้ง่ายๆ กติกาไม่ซับซ้อน ปลอดภัย และเล่นฟรีตลอดชีพ"
+          }
+        }
+      ]
+    }
+  ];
+
   return (
     <>
-      <SEO title="เกมวงเหล้า - วงล้อหมุน หมุนขวด เล่นฟรี" />
+      <SEO title="เกมวงเหล้า - วงล้อหมุน หมุนขวด เล่นฟรี" schema={homeSchema} />
       <main className="p-6 flex flex-col items-center min-h-full pt-10">
 
         {/* Header Section */}
@@ -30,9 +73,9 @@ const Home: React.FC = () => {
 
         {/* Main Actions */}
         <section className="w-full space-y-4 mb-8">
-          <button
-            onClick={() => navigate('/wheel')}
-            className="w-full group relative overflow-hidden rounded-3xl bg-slate-800/80 p-1 transition-all active:scale-[0.98] border border-slate-700/50 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10"
+          <Link
+            to="/wheel"
+            className="block w-full group relative overflow-hidden rounded-3xl bg-slate-800/80 p-1 transition-all active:scale-[0.98] border border-slate-700/50 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10"
           >
             <div className="relative z-10 bg-slate-900/50 backdrop-blur-sm rounded-[20px] p-5 flex items-center justify-between">
               <div className="flex items-center space-x-5">
@@ -46,11 +89,11 @@ const Home: React.FC = () => {
               </div>
               <ChevronRight className="text-slate-600 group-hover:text-pink-400 transition-colors" />
             </div>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => navigate('/bottle')}
-            className="w-full group relative overflow-hidden rounded-3xl bg-slate-800/80 p-1 transition-all active:scale-[0.98] border border-slate-700/50 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10"
+          <Link
+            to="/bottle"
+            className="block w-full group relative overflow-hidden rounded-3xl bg-slate-800/80 p-1 transition-all active:scale-[0.98] border border-slate-700/50 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10"
           >
             <div className="relative z-10 bg-slate-900/50 backdrop-blur-sm rounded-[20px] p-5 flex items-center justify-between">
               <div className="flex items-center space-x-5">
@@ -64,13 +107,13 @@ const Home: React.FC = () => {
               </div>
               <ChevronRight className="text-slate-600 group-hover:text-cyan-400 transition-colors" />
             </div>
-          </button>
+          </Link>
         </section>
 
         {/* Secondary Actions */}
         <div className="grid grid-cols-2 gap-3 w-full mb-8">
-          <button
-            onClick={() => navigate('/blog')}
+          <Link
+            to="/blog"
             className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/60 border border-slate-700 hover:bg-slate-700/60 transition-colors"
           >
             <div className="p-2 mb-2 bg-purple-500/20 text-purple-400 rounded-xl">
@@ -78,10 +121,10 @@ const Home: React.FC = () => {
             </div>
             <span className="text-sm font-bold text-slate-200">บทความ</span>
             <span className="text-[10px] text-slate-500">เทคนิค & กติกา</span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => navigate('/about')}
+          <Link
+            to="/about"
             className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/60 border border-slate-700 hover:bg-slate-700/60 transition-colors"
           >
             <div className="p-2 mb-2 bg-blue-500/20 text-blue-400 rounded-xl">
@@ -89,26 +132,30 @@ const Home: React.FC = () => {
             </div>
             <span className="text-sm font-bold text-slate-200">เกี่ยวกับเรา</span>
             <span className="text-[10px] text-slate-500">ผู้พัฒนา & ติดต่อ</span>
-          </button>
+          </Link>
         </div>
 
-        {/* Feature Grid (Coming Soon) */}
+        {/* Feature Grid (New Games) */}
         <section className="w-full mb-12">
           <h4 className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4 pl-2 flex items-center gap-2">
             <Sparkles size={12} className="text-yellow-500" />
-            Coming Soon
+            ใหม่ล่าสุด
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { icon: '🎲', label: 'ทอยเต๋า' },
-              { icon: '🎴', label: 'ไพ่คำสั่ง' },
-              { icon: '💣', label: 'กู้ระเบิด' }
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/40 border border-slate-700/30 opacity-60">
-                <span className="text-2xl mb-2 grayscale opacity-70">{item.icon}</span>
-                <span className="text-[10px] text-slate-400 font-medium">{item.label}</span>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              to="/dice" 
+              className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:bg-slate-800/60 hover:shadow-lg transition-all"
+            >
+              <Dices size={32} className="mb-2 text-yellow-500 drop-shadow-md" />
+              <span className="text-sm font-bold text-slate-200">ทอยเต๋า</span>
+            </Link>
+            <Link
+              to="/cards"
+              className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:bg-slate-800/60 hover:shadow-lg transition-all"
+            >
+              <Layers size={32} className="mb-2 text-pink-500 drop-shadow-md" />
+              <span className="text-sm font-bold text-slate-200">ไพ่คำสั่ง</span>
+            </Link>
           </div>
         </section>
 

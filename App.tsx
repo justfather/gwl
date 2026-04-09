@@ -8,6 +8,8 @@ import BlogPost from './pages/BlogPost';
 import Home from './pages/Home';
 import WheelGame from './pages/WheelGame';
 import BottleGame from './pages/BottleGame';
+import DiceGame from './pages/DiceGame';
+import CardsGame from './pages/CardsGame';
 import Placeholder from './pages/Placeholder';
 
 const App: React.FC = () => {
@@ -22,24 +24,8 @@ const App: React.FC = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
 
-          <Route
-            path="/dice"
-            element={
-              <Placeholder
-                title="ลูกเต๋าเสี่ยงทาย"
-                icon={<Dices size={48} className="text-yellow-500" />}
-              />
-            }
-          />
-          <Route
-            path="/cards"
-            element={
-              <Placeholder
-                title="ไพ่คำสั่ง"
-                icon={<ScrollText size={48} className="text-pink-500" />}
-              />
-            }
-          />
+          <Route path="/dice" element={<DiceGame />} />
+          <Route path="/cards" element={<CardsGame />} />
           <Route
             path="/games"
             element={

@@ -8,7 +8,7 @@ interface SEOProps {
     image?: string;
     url?: string;
     type?: 'website' | 'article';
-    schema?: object; // Support for JSON-LD Structured Data
+    schema?: object | object[]; // Support for JSON-LD Structured Data
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -48,7 +48,7 @@ const SEO: React.FC<SEOProps> = ({
             {/* JSON-LD Structured Data for Rich Snippets */}
             {schema && (
                 <script type="application/ld+json">
-                    {JSON.stringify(schema)}
+                    {JSON.stringify(Array.isArray(schema) ? schema : [schema])}
                 </script>
             )}
         </Helmet>

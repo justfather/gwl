@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { RefreshCw, X, Hand, Settings, Save, Check } from 'lucide-react';
+import { RefreshCw, X, Hand, Settings } from 'lucide-react';
 import { GameMode, FUN_QUESTS, HOT_QUESTS, HARD_QUESTS, randomizeOptions } from '../data/gameData';
 import { GameState, WheelOption } from '../types';
 import SEO from '../components/SEO';
-import { soundEffects } from '../src/utils/audioUtils';
-
-const STORAGE_KEYS = {
-  PRESET_1: 'wheelgame_custom_preset_1',
-  PRESET_2: 'wheelgame_custom_preset_2',
-  PRESET_3: 'wheelgame_custom_preset_3',
-};
 
 const WheelGame: React.FC = () => {
   // ... (state declarations remain same)
@@ -26,8 +19,6 @@ const WheelGame: React.FC = () => {
 
   // Custom Mode State
   const [customInputs, setCustomInputs] = useState<string[]>(Array(8).fill(''));
-  const [selectedPreset, setSelectedPreset] = useState<1 | 2 | 3>(1);
-  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Refs for physics loop
   const wheelRef = useRef<HTMLDivElement>(null);
@@ -53,54 +44,9 @@ const WheelGame: React.FC = () => {
   const PIN_COUNT = options.length > 0 ? options.length : 8;
   const SLICE_ANGLE = 360 / PIN_COUNT;
 
-  // ==========================================
-  // Preset Management Functions
-  // ==========================================
-  const getStorageKey = (preset: 1 | 2 | 3): string => {
-    return preset === 1 ? STORAGE_KEYS.PRESET_1 :
-           preset === 2 ? STORAGE_KEYS.PRESET_2 :
-           STORAGE_KEYS.PRESET_3;
-  };
-
-  const loadPreset = (preset: 1 | 2 | 3) => {
-    try {
-      const key = getStorageKey(preset);
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const data = JSON.parse(saved);
-        setCustomInputs(data);
-      } else {
-        setCustomInputs(Array(8).fill(''));
-      }
-    } catch (error) {
-      console.error('Error loading preset:', error);
-      setCustomInputs(Array(8).fill(''));
-    }
-  };
-
-  const savePreset = () => {
-    try {
-      const key = getStorageKey(selectedPreset);
-      localStorage.setItem(key, JSON.stringify(customInputs));
-
-      // Show success feedback
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 2000);
-    } catch (error) {
-      console.error('Error saving preset:', error);
-      alert('ไม่สามารถบันทึกได้ กรุณาลองใหม่');
-    }
-  };
-
-  const handlePresetSelect = (preset: 1 | 2 | 3) => {
-    setSelectedPreset(preset);
-    loadPreset(preset);
-  };
-
   // Init Options on Load
   useEffect(() => {
     handleModeSelect('FUN');
-    loadPreset(1); // Load preset 1 by default
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -162,7 +108,6 @@ const WheelGame: React.FC = () => {
     setResult(resultItem);
     setGameState(GameState.RESULT);
     triggerHaptic([100, 50, 100]);
-    soundEffects.playWin();
   }, [options]);
 
   const getAngle = (clientX: number, clientY: number, element: HTMLElement) => {
@@ -176,16 +121,8 @@ const WheelGame: React.FC = () => {
     if (!wheelRef.current) return;
 
     if (!isDragging.current && Math.abs(velocity.current) > 0) {
-      const prevRot = rotation.current;
       rotation.current += velocity.current;
       velocity.current *= FRICTION;
-
-      const currentSlice = Math.floor((((rotation.current % 360) + 360) % 360) / SLICE_ANGLE);
-      const prevSlice = Math.floor((((prevRot % 360) + 360) % 360) / SLICE_ANGLE);
-      
-      if (currentSlice !== prevSlice && Math.abs(velocity.current) > 1) {
-        soundEffects.playSpinTick();
-      }
 
       wheelRef.current.style.transform = `rotate(${rotation.current}deg) translateZ(0)`;
 
@@ -284,28 +221,6 @@ const WheelGame: React.FC = () => {
     if (needleRef.current) needleRef.current.style.transform = 'translateX(-50%) rotate(0deg) translateZ(0)';
   };
 
-  const shuffleQuestions = () => {
-    if (currentMode === 'CUSTOM') {
-      // สำหรับ custom mode ให้สุ่มจาก inputs ที่มีอยู่
-      const validInputs = customInputs.filter(t => t.trim().length > 0);
-      if (validInputs.length >= 2) {
-        const newOptions = randomizeOptions(validInputs);
-        setOptions(newOptions);
-      }
-    } else {
-      // สำหรับ preset modes ให้สุ่มจาก data ใหม่
-      let sourceData: string[] = [];
-      switch (currentMode) {
-        case 'FUN': sourceData = FUN_QUESTS; break;
-        case 'HOT': sourceData = HOT_QUESTS; break;
-        case 'HARD': sourceData = HARD_QUESTS; break;
-      }
-      const newOptions = randomizeOptions(sourceData);
-      setOptions(newOptions);
-    }
-    resetGame();
-  };
-
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current!);
@@ -345,7 +260,7 @@ const WheelGame: React.FC = () => {
       </div>
 
       {/* Wheel Container */}
-      <div className="relative w-full max-w-[500px] aspect-square mb-6 transition-all duration-300 mt-4 pointer-events-none">
+      <div className="relative w-full max-w-[600px] aspect-square mb-8 transition-all duration-300 mt-8">
 
         {/* Outer Ring */}
         <div className="absolute inset-[-4%] rounded-full bg-slate-800 shadow-2xl border border-slate-700"></div>
@@ -353,7 +268,7 @@ const WheelGame: React.FC = () => {
         {/* The Wheel */}
         <div
           ref={wheelRef}
-          className="w-full h-full rounded-full relative cursor-grab active:cursor-grabbing touch-none pointer-events-auto"
+          className="w-full h-full rounded-full relative cursor-grab active:cursor-grabbing touch-none"
           style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'rotate(0deg) translateZ(0)' }}
           onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
           onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
@@ -442,62 +357,6 @@ const WheelGame: React.FC = () => {
         )}
       </div>
 
-      {/* Mode Selector & Shuffle Button */}
-      <div className="flex flex-wrap items-center justify-center gap-2 pb-4">
-        <button
-          onClick={() => handleModeSelect('FUN')}
-          disabled={gameState === GameState.SPINNING}
-          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
-            currentMode === 'FUN'
-              ? 'bg-yellow-500 text-black shadow-lg'
-              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-          }`}
-        >
-          🤡 สายฮา
-        </button>
-        <button
-          onClick={() => handleModeSelect('HOT')}
-          disabled={gameState === GameState.SPINNING}
-          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
-            currentMode === 'HOT'
-              ? 'bg-pink-500 text-white shadow-lg'
-              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-          }`}
-        >
-          🔥 18+
-        </button>
-        <button
-          onClick={() => handleModeSelect('HARD')}
-          disabled={gameState === GameState.SPINNING}
-          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
-            currentMode === 'HARD'
-              ? 'bg-red-600 text-white shadow-lg'
-              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-          }`}
-        >
-          💀 สายแข็ง
-        </button>
-        <button
-          onClick={() => setShowModeSelect(true)}
-          disabled={gameState === GameState.SPINNING}
-          className={`px-3 py-1.5 rounded-full font-medium text-xs transition-all disabled:opacity-50 ${
-            currentMode === 'CUSTOM'
-              ? 'bg-blue-500 text-white shadow-lg'
-              : 'bg-slate-800/80 text-slate-300 border border-slate-600 hover:bg-slate-700'
-          }`}
-        >
-          ✏️ กำหนดเอง
-        </button>
-        <button
-          onClick={shuffleQuestions}
-          disabled={gameState === GameState.SPINNING}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 rounded-full border border-slate-500 text-white text-xs font-medium hover:bg-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <RefreshCw size={14} />
-          สุ่มใหม่
-        </button>
-      </div>
-
       {/* Mode Selection Modal */}
       {showModeSelect && createPortal(
         <div className="fixed inset-0 z-[10000] bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-4">
@@ -544,24 +403,7 @@ const WheelGame: React.FC = () => {
                 <div className="text-xs text-slate-400">ใส่ได้สูงสุด 8 ข้อ</div>
               </div>
 
-              {/* Preset Selector */}
-              <div className="flex gap-2 mb-4">
-                {([1, 2, 3] as const).map((preset) => (
-                  <button
-                    key={preset}
-                    onClick={() => handlePresetSelect(preset)}
-                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm transition-all ${
-                      selectedPreset === preset
-                        ? 'bg-blue-600 text-white shadow-lg scale-105'
-                        : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                    }`}
-                  >
-                    Preset {preset}
-                  </button>
-                ))}
-              </div>
-
-              <div className="space-y-2 mb-3">
+              <div className="space-y-2 mb-4">
                 {customInputs.map((input, idx) => (
                   <div key={idx} className="flex gap-2">
                     <span className="text-slate-500 w-6 text-center text-sm pt-2">{idx + 1}.</span>
@@ -575,29 +417,6 @@ const WheelGame: React.FC = () => {
                 ))}
               </div>
 
-              {/* Save Button */}
-              <button
-                onClick={savePreset}
-                className={`w-full py-2.5 rounded-xl font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2 ${
-                  saveSuccess
-                    ? 'bg-green-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
-              >
-                {saveSuccess ? (
-                  <>
-                    <Check size={18} />
-                    บันทึกสำเร็จ!
-                  </>
-                ) : (
-                  <>
-                    <Save size={18} />
-                    บันทึก Preset {selectedPreset}
-                  </>
-                )}
-              </button>
-
-              {/* Start Game Button */}
               <button
                 onClick={saveCustomMode}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-lg transition-all active:scale-95"
@@ -628,33 +447,13 @@ const WheelGame: React.FC = () => {
                   result.label.includes('Truth') ? '😈' : '🎉'}
               </div>
               <h3 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">ผลลัพธ์คือ</h3>
-              <h2 className="text-3xl font-black mb-6 leading-tight drop-shadow-md" style={{ color: result.color === '#ffffff' ? '#60a5fa' : result.color }}>
+              <h2 className="text-3xl font-black mb-8 leading-tight drop-shadow-md" style={{ color: result.color === '#ffffff' ? '#60a5fa' : result.color }}>
                 {result.label}
               </h2>
-              
-              <div className="flex gap-2">
-                <button
-                  onClick={async () => {
-                    try {
-                      soundEffects.playClick();
-                      await navigator.share({
-                        title: 'เกมวงเหล้า',
-                        text: `ฉันหมุนได้ "${result.label}" มาเล่นกันเถอะ!`,
-                        url: window.location.href,
-                      });
-                    } catch (e) {
-                      console.log('Share error or canceled', e);
-                    }
-                  }}
-                  className="flex-1 py-4 bg-slate-800 text-white border border-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-[0.96] cursor-pointer"
-                >
-                  แชร์
-                </button>
-                <button onClick={resetGame} className="flex-2 w-2/3 py-4 bg-white text-slate-950 rounded-2xl font-bold text-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-xl active:scale-[0.96] cursor-pointer">
-                  <RefreshCw size={22} />
-                  เล่นต่อ
-                </button>
-              </div>
+              <button onClick={resetGame} className="w-full py-4 bg-white text-slate-950 rounded-2xl font-bold text-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-xl active:scale-[0.96] cursor-pointer">
+                <RefreshCw size={22} />
+                เล่นต่อ
+              </button>
             </div>
           </div>
         </div>,
